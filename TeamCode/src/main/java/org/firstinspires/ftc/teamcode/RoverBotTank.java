@@ -58,6 +58,9 @@ public class RoverBotTank extends OpMode{
     /* Declare OpMode members. */
     HardwareRoverBot robot       = new HardwareRoverBot(); // use the class created to define a Pushbot's hardware
                                                          // could also use HardwarePushbotMatrix class.
+    double left;
+    double right;
+    double cubePower;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -92,9 +95,6 @@ public class RoverBotTank extends OpMode{
      */
     @Override
     public void loop() {
-        double left;
-        double right;
-
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
@@ -103,6 +103,19 @@ public class RoverBotTank extends OpMode{
         robot.frontLeftDrive.setPower(left);
         robot.rearRightDrive.setPower(right);
         robot.frontRightDrive.setPower(right);
+
+        //control the climber
+        if (gamepad2.y) {
+            robot.climber.setPower(1);
+        } else if (gamepad2.a) {
+            robot.climber.setPower(-1);
+        } else {
+            robot.climber.setPower(0);
+        }
+
+        //control the cubeArm's rotation
+        cubePower = -gamepad1.left_stick_y;
+        robot.cubeArm.setPower(cubePower);
     }
 
     /*

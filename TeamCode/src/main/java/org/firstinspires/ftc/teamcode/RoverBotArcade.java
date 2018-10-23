@@ -65,6 +65,7 @@ public class RoverBotArcade extends LinearOpMode {
         double drive;
         double turn;
         double max;
+        double cubePower;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -112,6 +113,10 @@ public class RoverBotArcade extends LinearOpMode {
             } else {
             robot.climber.setPower(0);
             }
+
+            //control the cubeArm's rotation
+            cubePower = -gamepad1.left_stick_y;
+            robot.cubeArm.setPower(cubePower);
 
             sleep(50);
         }

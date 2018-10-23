@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * This is NOT an opmode.
@@ -59,7 +60,11 @@ public class HardwareRoverBot
     public DcMotor  frontRightDrive  = null;
     public DcMotor  climber = null;
     public DcMotor  cubeArm = null;
-    public ColorSensor colorSensor =null;
+    public Servo mineralPusher = null;
+    public Servo mineralIntake = null;
+    public ColorSensor colorSensor = null;
+
+    public static final double MID_SERVO = 0.5 ;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -76,6 +81,12 @@ public class HardwareRoverBot
 
         //set an initialize sensors
         colorSensor = hwMap.get(ColorSensor.class, "ColorSensor");
+
+        // Define and Initialize Servos
+        mineralPusher = hwMap.get(Servo.class, "mineralPusher");
+        mineralIntake = hwMap.get(Servo.class, "mineralIntake");
+        mineralPusher.setPosition(MID_SERVO);
+        mineralIntake.setPosition(MID_SERVO);
 
         // Define and Initialize Motors
         rearLeftDrive   = hwMap.get(DcMotor.class, "rearLeftDrive");

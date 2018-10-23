@@ -51,9 +51,9 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="RoverBot: Teleop Tank", group="RoverBot")
+@TeleOp(name="Rover Bot Tank", group="RoverBot")
 //@Disabled
-public class RoverBotTeleopTank extends OpMode{
+public class RoverBotTank extends OpMode{
 
     /* Declare OpMode members. */
     HardwareRoverBot robot       = new HardwareRoverBot(); // use the class created to define a Pushbot's hardware

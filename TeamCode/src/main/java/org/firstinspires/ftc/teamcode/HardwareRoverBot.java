@@ -29,15 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import android.app.Activity;
-import android.view.View;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
 /**
@@ -66,8 +59,6 @@ public class HardwareRoverBot
     public DcMotor  frontRightDrive  = null;
     public ColorSensor colorSensor =null;
     public DcMotor  lift = null;
-  //  public Servo leftClaw = null;
-   // public Servo rightClaw = null;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -81,7 +72,7 @@ public class HardwareRoverBot
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         hwMap = ahwMap;
-       //set an initialize sensors
+        //set an initialize sensors
         colorSensor = hwMap.get(ColorSensor.class, "ColorSensor");
 
         // Define and Initialize Motors
@@ -96,7 +87,6 @@ public class HardwareRoverBot
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         frontRightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         lift.setDirection(DcMotor.Direction.FORWARD);
-     //   cubeLift.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
 
         // Set all motors to zero power
         rearLeftDrive.setPower(0);
@@ -104,7 +94,6 @@ public class HardwareRoverBot
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         lift.setPower(0);
-      //  cubeLift.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -119,13 +108,6 @@ public class HardwareRoverBot
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-     //   cubeLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
-        // Define and initialize ALL installed servos.
-      //  leftClaw = hwMap.get(Servo.class, "leftClaw");
-      //  rightClaw = hwMap.get(Servo.class, "rightClaw");
-
     }
  }
 

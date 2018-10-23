@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -47,9 +48,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="RoverBot: Teleop Tank", group="RoverBot")
+@TeleOp(name="Rover Bot Mecanum Drive", group="RoverBot")
 //@Disabled
-public class RoverBotWheelTest extends OpMode{
+public class RoverBotMecanumDrive extends OpMode{
+
+    double x;
+    double y;
+    double r;
 
     /* Declare OpMode members. */
     HardwareRoverBot robot       = new HardwareRoverBot(); // use the class created to define a Pushbot's hardware
@@ -88,17 +93,15 @@ public class RoverBotWheelTest extends OpMode{
      */
     @Override
     public void loop() {
-        double left;
-        double right;
+        //Mecanum test here
+        x = gamepad1.left_stick_x;
+        y = gamepad1.left_stick_y;
+        r = gamepad1.right_stick_y;
 
-        // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left = -gamepad1.left_stick_y;
-        right = -gamepad1.right_stick_y;
-
-        robot.rearLeftDrive.setPower(left);
-        robot.frontLeftDrive.setPower(left);
-        robot.rearRightDrive.setPower(right);
-        robot.frontRightDrive.setPower(right);
+        robot.frontLeftDrive.setPower(Range.scale(x + y + r, -3.0, 3.0, -1.0, 1.0));
+        robot.frontRightDrive.setPower(Range.scale(x - y - r, -3.0, 3.0, -1.0, 1.0));
+        robot.rearLeftDrive.setPower(Range.scale(x - y + r, -2.0, 2.0, -1.0, 1.0));
+        robot.rearRightDrive.setPower(Range.scale(x + y - r, -2.0, 2.0, -1.0, 1.0));
     }
 
     /*

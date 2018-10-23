@@ -29,8 +29,11 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import android.graphics.Color;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -47,9 +50,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="RoverBotTeleopMacanumTest", group="RoverBot")
+@TeleOp(name="Rover Bot Color Sensor Test", group="Test")
 //@Disabled
-public class RoverBotTeleopMacanumTest extends OpMode{
+public class RoverBotColorSensorTest extends OpMode{
 
     /* Declare OpMode members. */
     HardwareRoverBot robot       = new HardwareRoverBot(); // use the class created to define a Pushbot's hardware
@@ -88,29 +91,17 @@ public class RoverBotTeleopMacanumTest extends OpMode{
      */
     @Override
     public void loop() {
-        //Mechanum test here
-        if (gamepad1.left_trigger > 0) {
-            double triggerValue = gamepad1.left_trigger;
+        float hsvValues[] = {0F,0F,0F};
 
-            robot.rearLeftDrive.setPower(triggerValue);
-            robot.rearRightDrive.setPower(-triggerValue);
-            robot.frontLeftDrive.setPower(-triggerValue);
-            robot.frontRightDrive.setPower(triggerValue);
+        Color.RGBToHSV(robot.colorSensor.red() * 8, robot.colorSensor.green() * 8,robot.colorSensor.blue() * 8, hsvValues);
 
-        } else if (gamepad1.right_trigger> 0){
-            double triggerValue=gamepad1.right_trigger;
+        telemetry.addData("Clear", robot.colorSensor.alpha());
+        telemetry.addData("Red  ", robot.colorSensor.red());
+        telemetry.addData("Green", robot.colorSensor.green());
+        telemetry.addData("Blue ", robot.colorSensor.blue());
+        telemetry.addData("Hue", hsvValues[0]);
 
-            robot.rearLeftDrive.setPower(-triggerValue);
-            robot.rearRightDrive.setPower(triggerValue);
-            robot.frontLeftDrive.setPower(triggerValue);
-            robot.frontRightDrive.setPower(-triggerValue);
-        } else {
-            robot.rearLeftDrive.setPower(0);
-            robot.rearRightDrive.setPower(0);
-            robot.frontLeftDrive.setPower(0);
-            robot.frontRightDrive.setPower(0);
-        }
-
+        telemetry.update();
     }
 
     /*

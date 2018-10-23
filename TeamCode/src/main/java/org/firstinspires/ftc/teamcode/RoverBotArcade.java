@@ -57,8 +57,6 @@ public class RoverBotArcade extends LinearOpMode {
     /* Declare OpMode members. */
     HardwareRoverBot robot           = new HardwareRoverBot();   // Use a Pushbot's hardware
                                                                // could also use HardwarePushbotMatrix class.
-    double          clawOffset      = 0;                       // Servo mid position
-    final double    CLAW_SPEED      = 0.02 ;                   // sets rate to move servo
 
     @Override
     public void runOpMode() {
@@ -105,13 +103,14 @@ public class RoverBotArcade extends LinearOpMode {
             robot.rearRightDrive.setPower(right);
             robot.frontRightDrive.setPower(right);
             robot.frontLeftDrive.setPower(left);
-            //control the lift
+
+            //control the climber
             if (gamepad2.y) {
-                robot.lift.setPower(1);
+                robot.climber.setPower(1);
             } else if (gamepad2.a) {
-                robot.lift.setPower(-1);
+                robot.climber.setPower(-1);
             } else {
-            robot.lift.setPower(0);
+            robot.climber.setPower(0);
             }
 
             sleep(50);

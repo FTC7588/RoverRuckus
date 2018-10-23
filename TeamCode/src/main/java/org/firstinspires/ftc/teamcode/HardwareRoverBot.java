@@ -57,8 +57,9 @@ public class HardwareRoverBot
     public DcMotor  rearRightDrive  = null;
     public DcMotor  frontLeftDrive  = null;
     public DcMotor  frontRightDrive  = null;
+    public DcMotor  climber = null;
+    public DcMotor  cubeArm = null;
     public ColorSensor colorSensor =null;
-    public DcMotor  lift = null;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -72,6 +73,7 @@ public class HardwareRoverBot
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         hwMap = ahwMap;
+
         //set an initialize sensors
         colorSensor = hwMap.get(ColorSensor.class, "ColorSensor");
 
@@ -80,20 +82,23 @@ public class HardwareRoverBot
         rearRightDrive  = hwMap.get(DcMotor.class, "rearRightDrive");
         frontLeftDrive  = hwMap.get(DcMotor.class, "frontLeftDrive");
         frontRightDrive = hwMap.get(DcMotor.class, "frontRightDrive");
-        lift =hwMap.get(DcMotor.class, "Lift");
+        climber =hwMap.get(DcMotor.class, "climber");
+        cubeArm =hwMap.get(DcMotor.class, "cubeArm");
 
         rearLeftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rearRightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         frontRightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        lift.setDirection(DcMotor.Direction.FORWARD);
+        climber.setDirection(DcMotor.Direction.FORWARD);
+        cubeArm.setDirection(DcMotor.Direction.FORWARD);
 
         // Set all motors to zero power
         rearLeftDrive.setPower(0);
         rearRightDrive.setPower(0);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
-        lift.setPower(0);
+        climber.setPower(0);
+        cubeArm.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -101,13 +106,15 @@ public class HardwareRoverBot
         rearRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        climber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        cubeArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         rearLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rearRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        climber.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        cubeArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
  }
 

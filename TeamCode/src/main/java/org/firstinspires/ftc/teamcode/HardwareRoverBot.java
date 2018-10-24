@@ -85,7 +85,8 @@ public class HardwareRoverBot
         // Define and Initialize Servos
         mineralPusher = hwMap.get(Servo.class, "mineralPusher");
         mineralIntake = hwMap.get(Servo.class, "mineralIntake");
-        mineralPusher.setPosition(MID_SERVO);
+
+        mineralPusher.setPosition(0);
         mineralIntake.setPosition(MID_SERVO);
 
         // Define and Initialize Motors

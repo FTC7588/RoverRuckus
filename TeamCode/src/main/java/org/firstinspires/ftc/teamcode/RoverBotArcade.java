@@ -105,6 +105,10 @@ public class RoverBotArcade extends LinearOpMode {
             robot.frontRightDrive.setPower(right);
             robot.frontLeftDrive.setPower(left);
 
+            //control the cubeArm's rotation
+            cubePower = -gamepad1.left_stick_y;
+            robot.cubeArm.setPower(cubePower);
+
             //control the climber
             if (gamepad2.y) {
                 robot.climber.setPower(1);
@@ -114,9 +118,19 @@ public class RoverBotArcade extends LinearOpMode {
             robot.climber.setPower(0);
             }
 
-            //control the cubeArm's rotation
-            cubePower = -gamepad1.left_stick_y;
-            robot.cubeArm.setPower(cubePower);
+            if (gamepad2.dpad_up) {
+                robot.mineralIntake.setPosition(1.0);
+            } else if (gamepad2.dpad_down) {
+                robot.mineralIntake.setPosition(0);
+            } else {
+                robot.mineralIntake.setPosition(.5);
+            }
+
+            if (gamepad2.b) {
+                robot.mineralPusher.setPosition(1.0);
+            } else {
+                robot.mineralPusher.setPosition(0);
+            }
 
             sleep(50);
         }

@@ -106,7 +106,7 @@ public class RoverBotArcade extends LinearOpMode {
             robot.frontLeftDrive.setPower(left);
 
             //control the cubeArm's rotation
-            cubePower = -gamepad1.left_stick_y;
+            cubePower = -gamepad2.left_stick_y;
             robot.cubeArm.setPower(cubePower);
 
             //control the climber

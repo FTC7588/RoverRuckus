@@ -113,6 +113,7 @@ public class RoverBotEncoderTest extends LinearOpMode {
 
         while (!gamepad1.b) {
             telemetry.addData("front left  motor pos", robot.frontLeftDrive.getCurrentPosition());
+            telemetry.update();
         }
 
         telemetry.addData("Path", "Complete");

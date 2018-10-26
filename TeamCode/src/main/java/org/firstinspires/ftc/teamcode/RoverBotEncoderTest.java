@@ -90,6 +90,15 @@ public class RoverBotEncoderTest extends LinearOpMode {
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
+        telemetry.addData("Status", "Starting Encoders");    //
+        telemetry.update();
+
+        robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rearLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rearRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
 
@@ -99,11 +108,6 @@ public class RoverBotEncoderTest extends LinearOpMode {
         robot.rearLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rearRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rearLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rearRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Status", "Encoders Reset");
         telemetry.update();
@@ -111,12 +115,16 @@ public class RoverBotEncoderTest extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        while (!gamepad1.b) {
+        double yes = 0;
+
+        while (true) {
+            yes = yes+1;
             telemetry.addData("front left  motor pos", robot.frontLeftDrive.getCurrentPosition());
+            telemetry.addData("Loop Count", yes);
             telemetry.update();
         }
 
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
+        //telemetry.addData("Path", "Complete");
+        //telemetry.update();
     }
 }

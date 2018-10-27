@@ -131,7 +131,12 @@ public class RoverBotArcade extends LinearOpMode {
             } else {
                 robot.mineralPusher.setPosition(0);
             }
-
+            //control the hatch
+            if (gamepad2.left_bumper) {
+                robot.hatch.setPosition(robot.MID_SERVO);
+            } else if  (gamepad2.right_bumper) {
+                robot.hatch.setPosition(1);
+            }
             sleep(50);
         }
     }

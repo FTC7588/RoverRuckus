@@ -124,15 +124,8 @@ public class RoverBotArcade extends LinearOpMode {
                 robot.mineralIntake.setPosition(0);
             } else {
                 robot.mineralIntake.setPosition(.5);
+                sleep(50);
             }
-
-            if (gamepad2.b) {
-                robot.mineralPusher.setPosition(1.0);
-            } else {
-                robot.mineralPusher.setPosition(0);
-            }
-
-            sleep(50);
         }
     }
 }

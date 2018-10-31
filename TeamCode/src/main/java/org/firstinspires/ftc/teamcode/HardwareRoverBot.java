@@ -63,6 +63,7 @@ public class HardwareRoverBot
     public DcMotor  cubeArm = null;
     public Servo mineralPusher = null;
     public Servo mineralIntake = null;
+    public Servo hatch = null;
     public ColorSensor colorSensor = null;
 
     public static final double MID_SERVO = 0.5 ;
@@ -86,9 +87,11 @@ public class HardwareRoverBot
         // Define and Initialize Servos
         mineralPusher = hwMap.get(Servo.class, "mineralPusher");
         mineralIntake = hwMap.get(Servo.class, "mineralIntake");
+        hatch = hwMap.get(Servo.class, "hatch");
 
         mineralPusher.setPosition(0);
         mineralIntake.setPosition(MID_SERVO);
+        hatch.setPosition(MID_SERVO);
 
         // Define and Initialize Motors
         rearLeftDrive   = hwMap.get(DcMotor.class, "rearLeftDrive");

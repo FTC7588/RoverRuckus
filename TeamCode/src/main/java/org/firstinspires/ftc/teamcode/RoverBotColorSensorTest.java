@@ -95,11 +95,16 @@ public class RoverBotColorSensorTest extends OpMode{
 
         Color.RGBToHSV(robot.colorSensor.red() * 8, robot.colorSensor.green() * 8,robot.colorSensor.blue() * 8, hsvValues);
 
-        telemetry.addData("Clear", robot.colorSensor.alpha());
-        telemetry.addData("Red  ", robot.colorSensor.red());
-        telemetry.addData("Green", robot.colorSensor.green());
-        telemetry.addData("Blue ", robot.colorSensor.blue());
-        telemetry.addData("Hue", hsvValues[0]);
+        if (hsvValues[0] >= 35 && hsvValues[0] <= 50) {
+            telemetry.addData("Say", "Gold");
+        } else if (hsvValues[0] >= 100 && hsvValues[0] <= 145) {
+            telemetry.addData("Say", "Silver");
+        } else {
+            telemetry.addData("Say","Nothing");
+        }
+
+        //Debug Line
+        //telemetry.addData("Hue", hsvValues[0]);
 
         telemetry.update();
     }

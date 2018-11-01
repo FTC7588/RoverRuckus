@@ -93,19 +93,31 @@ public class RoverBotMecanumDrive extends OpMode{
      */
     @Override
     public void loop() {
-        //Mecanum test here
-        x = gamepad1.left_stick_x;
-        y = gamepad1.left_stick_y;
-        r = gamepad1.right_stick_y;
+        if (gamepad1.left_trigger > .5) {
+            robot.rearLeftDrive.setPower(-1.0);
+            robot.rearRightDrive.setPower(1.0);
+            robot.frontLeftDrive.setPower(1.0);
+            robot.frontRightDrive.setPower(-1.0);
+        } else if (gamepad1.right_trigger > .5) {
+            robot.rearLeftDrive.setPower(1.0);
+            robot.rearRightDrive.setPower(-1.0);
+            robot.frontLeftDrive.setPower(-1.0);
+            robot.frontRightDrive.setPower(1.0);
+        } else {
+            //Mecanum test here
+            x = gamepad1.left_stick_x;
+            y = gamepad1.left_stick_y;
+            r = gamepad1.right_stick_y;
 
-        robot.frontLeftDrive.setPower(Range.scale(x + y, -2.0, 2.0, -1.0, 1.0));
-        robot.frontRightDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
-        robot.rearLeftDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
-        robot.rearRightDrive.setPower(Range.scale(x + y, -2.0, 2.0, -1.0, 1.0));
-        //+r
-        //-r
-        //+r
-        //-r
+            robot.frontLeftDrive.setPower(Range.scale(x + y, -2.0, 2.0, -1.0, 1.0));
+            robot.frontRightDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
+            robot.rearLeftDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
+            robot.rearRightDrive.setPower(Range.scale(x + y, -2.0, 2.0, -1.0, 1.0));
+            //+r
+            //-r
+            //+r
+            //-r
+        }
     }
 
     /*

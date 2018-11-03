@@ -51,7 +51,7 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@TeleOp(name = "Concept: TensorFlow Object Detection Webcam", group = "Concept")
+@TeleOp(name = "Tensor Webcam Test", group = "Test")
 @Disabled
 public class TensorWebcamTest extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
@@ -70,7 +70,7 @@ public class TensorWebcamTest extends LinearOpMode {
      * Once you've obtained a license key, copy the string from the Vuforia web site
      * and paste it in to your code on the next line, between the double quotes.
      */
-    private static final String VUFORIA_KEY = " -- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+    private static final String VUFORIA_KEY = "AbehSUj/////AAAAGXcfS4W8XkPLnxWjPY91DU0XNIcReXO8OXhnUS1EaAUmko1Fpi7H1hOVE/ComUrz+aJ755nTsrmPW55WUaNP/daU2QY+X1RLO9DQDj/P93UbQqevqV1zVr1NocXTuSXczUzIYkAwkSzoKBbM5wyC8p8z83H+HJOFJjMvzSiVNhPcC/Nn/Q+wzPlZm1+oJ2onuYPPz05JW2NkLOHsYYIyS9H+419rYS0r1YKSK0glfL6rfrcvPJ3KbAqrkurH5XqXxphPyRoAksVM9B1tPtlpe6XBApamVEmOUTvbV7oimIHxsOCu2M2XCbMEj6bcRcKz3i6li72yM0nZMlOuj7XY67xecojGTAW006ujsgh7K7/W";
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia

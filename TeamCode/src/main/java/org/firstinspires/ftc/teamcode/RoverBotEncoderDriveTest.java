@@ -65,7 +65,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @Autonomous(name="Rover Bot Default Encoder", group="Test")
-@Disabled
+//@Disabled
 public class RoverBotEncoderDriveTest extends LinearOpMode {
 
     /* Declare OpMode members. */

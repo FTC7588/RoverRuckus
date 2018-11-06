@@ -29,11 +29,16 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 /**
  * This is NOT an opmode.
@@ -63,10 +68,11 @@ public class HardwareRoverBot
     public DcMotor  cubeArm = null;
     public Servo mineralPusher = null;
     public Servo mineralIntake = null;
-   // public Servo hatch = null;
+    public Servo hatch = null;
     public ColorSensor colorSensor = null;
+    public BNO055IMU imu;
 
-    public static final double MID_SERVO = 0.5 ;
+    static final double MID_SERVO = 0.5 ;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -81,19 +87,22 @@ public class HardwareRoverBot
         // Save reference to Hardware map
         hwMap = ahwMap;
 
-        //set an initialize sensors
-        colorSensor = hwMap.get(ColorSensor.class, "ColorSensor");
+        /**
+         *         Define and Initialize Servos
+          */
 
-        // Define and Initialize Servos
         mineralPusher = hwMap.get(Servo.class, "mineralPusher");
         mineralIntake = hwMap.get(Servo.class, "mineralIntake");
-       // hatch = hwMap.get(Servo.class, "hatch");
+        hatch = hwMap.get(Servo.class, "hatch");
 
         mineralPusher.setPosition(0);
         mineralIntake.setPosition(MID_SERVO);
-        //hatch.setPosition(MID_SERVO);
+        hatch.setPosition(MID_SERVO);
 
-        // Define and Initialize Motors
+        /**
+         *         Define and Initialize Motors
+          */
+
         rearLeftDrive   = hwMap.get(DcMotor.class, "rearLeftDrive");
         rearRightDrive  = hwMap.get(DcMotor.class, "rearRightDrive");
         frontLeftDrive  = hwMap.get(DcMotor.class, "frontLeftDrive");
@@ -131,6 +140,29 @@ public class HardwareRoverBot
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         climber.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         cubeArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        /**
+         *         Define and initialize sensors
+         */
+
+        colorSensor = hwMap.get(ColorSensor.class, "ColorSensor");
+
+        // Set up the parameters with which we will use our IMU. Note that integration
+        // algorithm here just reports accelerations to the logcat log; it doesn't actually
+        // provide positional information.
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
+        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
+        // and named "imu".
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
     }
  }
 

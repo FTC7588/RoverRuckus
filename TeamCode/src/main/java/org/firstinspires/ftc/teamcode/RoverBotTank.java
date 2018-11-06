@@ -96,8 +96,8 @@ public class RoverBotTank extends OpMode{
     @Override
     public void loop() {
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left = -gamepad1.left_stick_y;
-        right = -gamepad1.right_stick_y;
+        left = Range.scale(-gamepad1.left_stick_y, -1.0,1.0, -.5,.5);
+        right = Range.scale(-gamepad1.right_stick_y, -1.0,1.0, -.5,.5);
 
         robot.rearLeftDrive.setPower(left);
         robot.frontLeftDrive.setPower(left);

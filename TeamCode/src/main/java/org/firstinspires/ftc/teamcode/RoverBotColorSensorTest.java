@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import android.graphics.Color;
@@ -51,7 +52,7 @@ import android.graphics.Color;
  */
 
 @TeleOp(name="Rover Bot Color Sensor Test", group="Test")
-//@Disabled
+@Disabled
 public class RoverBotColorSensorTest extends OpMode{
 
     /* Declare OpMode members. */

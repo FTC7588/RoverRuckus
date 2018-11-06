@@ -70,7 +70,7 @@ public class TensorWebcamTest extends LinearOpMode {
      * Once you've obtained a license key, copy the string from the Vuforia web site
      * and paste it in to your code on the next line, between the double quotes.
      */
-    private static final String VUFORIA_KEY = "AbehSUj/////AAAAGXcfS4W8XkPLnxWjPY91DU0XNIcReXO8OXhnUS1EaAUmko1Fpi7H1hOVE/ComUrz+aJ755nTsrmPW55WUaNP/daU2QY+X1RLO9DQDj/P93UbQqevqV1zVr1NocXTuSXczUzIYkAwkSzoKBbM5wyC8p8z83H+HJOFJjMvzSiVNhPcC/Nn/Q+wzPlZm1+oJ2onuYPPz05JW2NkLOHsYYIyS9H+419rYS0r1YKSK0glfL6rfrcvPJ3KbAqrkurH5XqXxphPyRoAksVM9B1tPtlpe6XBApamVEmOUTvbV7oimIHxsOCu2M2XCbMEj6bcRcKz3i6li72yM0nZMlOuj7XY67xecojGTAW006ujsgh7K7/W";
+    private static final String VUFORIA_KEY = "AXPTQvj/////AAABmfe8VdJO1Ut0vWLwZbZkXIpoHvWlLYIv4ANU52SZaGL+f7Gz4a58VdLEGTBceJChEUwcgSqkOftzl47rP0bDKgjriyfQaXBfCufFEW+kCUpaHMRJzepjuUSETNJCfTSo+Ho2ZR4KUmQVpIDuINh0kZe3o/Kx3qMSgcXpKTwyfbe0qivpYCMa+LN6IpQJnmlxCB3gxtiYzD57jA4rVIs/PiDfCOBtDyD6P82Tf5QAqzdK4gIx7xMcMNjOCsJqlXduZB+iFtAGU8sQvhVMEEI5pT00nnR8XMtO24EQGRxatnDtbdcZjhIQAXSn1hNvnWo6U79Ave4qRBmOM0NNGwx42cN50jpG0eV2xzBhN6wplyxF";
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia

@@ -93,22 +93,16 @@ public class RoverBotPIDTest extends LinearOpMode {
         telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
 
-        robot.rearLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rearRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.rearLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rearRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path0",  "Starting at %7d, %7d : %7d, %7d",
+        telemetry.addData("Path0",  "Starting at %7d : %7d",
                           robot.frontLeftDrive.getCurrentPosition(),
-                          robot.rearLeftDrive.getCurrentPosition(),
-                          robot.frontRightDrive.getCurrentPosition(),
-                          robot.rearRightDrive.getCurrentPosition());
+                          robot.frontRightDrive.getCurrentPosition());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -144,8 +138,6 @@ public class RoverBotPIDTest extends LinearOpMode {
             // Determine new target position, and pass to motor controller
             newLeftTarget = robot.rearLeftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
             newRightTarget = robot.rearRightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            robot.rearLeftDrive.setTargetPosition(newLeftTarget);
-            robot.rearRightDrive.setTargetPosition(newRightTarget);
             robot.frontLeftDrive.setTargetPosition(newLeftTarget);
             robot.frontRightDrive.setTargetPosition(newRightTarget);
 
@@ -157,10 +149,10 @@ public class RoverBotPIDTest extends LinearOpMode {
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.rearLeftDrive.setPower(Math.abs(speed));
-            robot.rearRightDrive.setPower(Math.abs(speed));
             robot.frontLeftDrive.setPower(Math.abs(speed));
             robot.frontRightDrive.setPower(Math.abs(speed));
+            robot.rearLeftDrive.setPower(robot.frontLeftDrive.getPower());
+            robot.rearRightDrive.setPower(robot.frontRightDrive.getPower());
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -170,13 +162,11 @@ public class RoverBotPIDTest extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                    (runtime.seconds() < timeoutS) &&
-                   (robot.rearLeftDrive.isBusy() && robot.rearRightDrive.isBusy() && robot.frontLeftDrive.isBusy() && robot.frontRightDrive.isBusy())) {
+                   (robot.frontLeftDrive.isBusy() && robot.frontRightDrive.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                telemetry.addData("Path2",  "Running at %7d, %7d : %7d, %7d",
-                                            robot.rearLeftDrive.getCurrentPosition(),
-                                            robot.rearRightDrive.getCurrentPosition(),
+                telemetry.addData("Path1",  "Running to %7d : %7d", newLeftTarget,  newRightTarget);
+                telemetry.addData("Path2",  "Running at %7d : %7d",
                                             robot.frontLeftDrive.getCurrentPosition(),
                                             robot.frontRightDrive.getCurrentPosition());
                 telemetry.update();

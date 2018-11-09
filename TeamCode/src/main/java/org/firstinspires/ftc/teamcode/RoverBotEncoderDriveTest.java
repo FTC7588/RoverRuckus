@@ -160,7 +160,7 @@ public class RoverBotEncoderDriveTest extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                    (runtime.seconds() < timeoutS) &&
-                   (robot.rearLeftDrive.isBusy() && robot.rearRightDrive.isBusy() && robot.frontLeftDrive.isBusy() && robot.frontRightDrive.isBusy())) {
+                   (robot.frontLeftDrive.isBusy() && robot.frontRightDrive.isBusy())) {
 
                 //robot.rearLeftDrive.setPower(robot.frontLeftDrive.getPower());
                 //robot.rearRightDrive.setPower(robot.frontRightDrive.getPower());

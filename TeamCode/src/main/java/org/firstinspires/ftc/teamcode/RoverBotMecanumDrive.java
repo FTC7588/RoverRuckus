@@ -105,14 +105,14 @@ public class RoverBotMecanumDrive extends OpMode{
             robot.frontRightDrive.setPower(1.0);
         } else {
             //Mecanum test here
-            x = gamepad1.left_stick_x;
-            y = gamepad1.left_stick_y;
+            x = gamepad1.left_stick_y;
+            y = gamepad1.left_stick_x;
             r = gamepad1.right_stick_y;
 
-            robot.frontLeftDrive.setPower(Range.scale(x + y, -2.0, 2.0, -1.0, 1.0));
-            robot.frontRightDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
-            robot.rearLeftDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
-            robot.rearRightDrive.setPower(Range.scale(x + y, -2.0, 2.0, -1.0, 1.0));
+            robot.frontLeftDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
+            robot.frontRightDrive.setPower(Range.scale(x + y, -2.0, 2.0, -1.0, 1.0));
+            robot.rearLeftDrive.setPower(Range.scale(x + y, -2.0, 2.0, -1.0, 1.0));
+            robot.rearRightDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
             //+r
             //-r
             //+r

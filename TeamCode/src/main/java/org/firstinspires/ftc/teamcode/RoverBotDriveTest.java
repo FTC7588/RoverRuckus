@@ -64,16 +64,16 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Rover Bot Default Encoder", group="Test")
+@Autonomous(name="RoverBot Drive Test", group="Test")
 //@Disabled
-public class RoverBotEncoderDriveTest extends LinearOpMode {
+public class RoverBotDriveTest extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwareRoverBot         robot   = new HardwareRoverBot();   // Use a Pushbot's hardware
+    HardwareRoverBot        robot   = new HardwareRoverBot();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 35 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
+    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -100,7 +100,7 @@ public class RoverBotEncoderDriveTest extends LinearOpMode {
         robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path0",  "Starting at %7d : %7d",
+        telemetry.addData("Path0",  "Starting at %7d :%7d",
                           robot.frontLeftDrive.getCurrentPosition(),
                           robot.frontRightDrive.getCurrentPosition());
         telemetry.update();
@@ -110,9 +110,9 @@ public class RoverBotEncoderDriveTest extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  48,  48, 10.0);  // S1: Forward 47 Inches with 5 Sec timeout
-        //encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        //encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -136,8 +136,8 @@ public class RoverBotEncoderDriveTest extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.rearLeftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = robot.rearRightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newLeftTarget = robot.frontLeftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newRightTarget = robot.frontRightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
             robot.frontLeftDrive.setTargetPosition(newLeftTarget);
             robot.frontRightDrive.setTargetPosition(newRightTarget);
 
@@ -149,8 +149,6 @@ public class RoverBotEncoderDriveTest extends LinearOpMode {
             runtime.reset();
             robot.frontLeftDrive.setPower(Math.abs(speed));
             robot.frontRightDrive.setPower(Math.abs(speed));
-            robot.rearLeftDrive.setPower(robot.frontLeftDrive.getPower());
-            robot.rearRightDrive.setPower(robot.frontRightDrive.getPower());
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -162,20 +160,15 @@ public class RoverBotEncoderDriveTest extends LinearOpMode {
                    (runtime.seconds() < timeoutS) &&
                    (robot.frontLeftDrive.isBusy() && robot.frontRightDrive.isBusy())) {
 
-                //robot.rearLeftDrive.setPower(robot.frontLeftDrive.getPower());
-                //robot.rearRightDrive.setPower(robot.frontRightDrive.getPower());
-
                 // Display it for the driver.
                 telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                telemetry.addData("Path2",  "Running at %7d : %7d",
+                telemetry.addData("Path2",  "Running at %7d :%7d",
                                             robot.frontLeftDrive.getCurrentPosition(),
                                             robot.frontRightDrive.getCurrentPosition());
                 telemetry.update();
             }
 
             // Stop all motion;
-            robot.rearLeftDrive.setPower(0);
-            robot.rearRightDrive.setPower(0);
             robot.frontLeftDrive.setPower(0);
             robot.frontRightDrive.setPower(0);
 

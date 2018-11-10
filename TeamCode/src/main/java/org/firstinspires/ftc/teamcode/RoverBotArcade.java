@@ -85,8 +85,8 @@ public class RoverBotArcade extends LinearOpMode {
             // Run wheels in POV mode (note: The joystick goes negative when pushed forwards, so negate it)
             // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
             // This way it's also easy to just drive straight, or just turn.
-            drive = Range.scale(gamepad1.left_stick_y, -1.0,1.0, -.5,.5);
-            turn = Range.scale(-gamepad1.right_stick_x, -1.0,1.0, -.5,.5);
+            drive = gamepad1.left_stick_y;
+            turn = -gamepad1.right_stick_x;
 
             // Combine drive and turn for blended motion.
             left = drive + turn;

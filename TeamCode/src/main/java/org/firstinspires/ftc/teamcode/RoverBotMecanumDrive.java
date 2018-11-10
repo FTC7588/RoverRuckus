@@ -33,6 +33,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
+import static android.os.SystemClock.sleep;
+
 /**
  * This file provides basic Telop driving for a Pushbot robot.
  * The code is structured as an Iterative OpMode
@@ -55,6 +57,7 @@ public class RoverBotMecanumDrive extends OpMode{
     double x;
     double y;
     double r;
+    double cubePower;
 
     /* Declare OpMode members. */
     HardwareRoverBot robot       = new HardwareRoverBot(); // use the class created to define a Pushbot's hardware
@@ -71,7 +74,7 @@ public class RoverBotMecanumDrive extends OpMode{
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
+        telemetry.addData("Say", "Howdy Driver");    //
     }
 
     /*
@@ -113,6 +116,28 @@ public class RoverBotMecanumDrive extends OpMode{
             robot.frontRightDrive.setPower(Range.scale(x + y - r, -2.0, 2.0, -1.0, 1.0));
             robot.rearLeftDrive.setPower(Range.scale(x + y + r, -2.0, 2.0, -1.0, 1.0));
             robot.rearRightDrive.setPower(Range.scale(x - y - r, -2.0, 2.0, -1.0, 1.0));
+        }
+
+        //control the cubeArm's rotation
+        cubePower = -gamepad2.left_stick_y;
+        robot.cubeArm.setPower(cubePower);
+
+        //control the climber
+        if (gamepad2.y) {
+            robot.climber.setPower(1);
+        } else if (gamepad2.a) {
+            robot.climber.setPower(-1);
+        } else {
+            robot.climber.setPower(0);
+        }
+
+        if (gamepad2.dpad_up) {
+            robot.mineralIntake.setPosition(1.0);
+        } else if (gamepad2.dpad_down) {
+            robot.mineralIntake.setPosition(0);
+        } else {
+            robot.mineralIntake.setPosition(.5);
+            sleep(50);
         }
     }
 

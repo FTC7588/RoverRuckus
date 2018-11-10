@@ -120,7 +120,7 @@ public class RoverBotMecanumDrive extends OpMode{
 
         //control the cubeArm's rotation
         cubePower = -gamepad2.left_stick_y;
-        robot.cubeArm.setPower(cubePower);
+        robot.cubeArm.setPower(Range.scale(cubePower, -1.0, 1.0, -0.1, 0.1));
 
         //control the climber
         if (gamepad2.y) {

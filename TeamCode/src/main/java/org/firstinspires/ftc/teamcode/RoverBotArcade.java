@@ -110,9 +110,9 @@ public class RoverBotArcade extends LinearOpMode {
             robot.cubeArm.setPower(cubePower);
 
             //control the climber
-            if (gamepad1.y) {
+            if (gamepad2.y) {
                 robot.climber.setPower(1);
-            } else if (gamepad1.a) {
+            } else if (gamepad2.a) {
                 robot.climber.setPower(-1);
             } else {
             robot.climber.setPower(0);

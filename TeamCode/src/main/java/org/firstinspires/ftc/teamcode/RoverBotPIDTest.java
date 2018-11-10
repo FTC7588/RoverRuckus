@@ -65,7 +65,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @Autonomous(name="Rover Bot PID Test", group="Test")
-//@Disabled
+@Disabled
 public class RoverBotPIDTest extends LinearOpMode {
 
     /* Declare OpMode members. */

@@ -52,7 +52,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @TeleOp(name="Rover Bot Tank", group="RoverBot")
-//@Disabled
+@Disabled
 public class RoverBotTank extends OpMode{
 
     /* Declare OpMode members. */

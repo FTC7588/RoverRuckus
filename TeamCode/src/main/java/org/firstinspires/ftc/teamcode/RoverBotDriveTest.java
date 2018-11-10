@@ -65,7 +65,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @Autonomous(name="RoverBot Drive Test", group="Test")
-//@Disabled
+@Disabled
 public class RoverBotDriveTest extends LinearOpMode {
 
     /* Declare OpMode members. */

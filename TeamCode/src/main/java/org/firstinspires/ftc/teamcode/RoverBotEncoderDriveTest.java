@@ -134,10 +134,10 @@ public class RoverBotEncoderDriveTest extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = -robot.rearLeftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = -robot.rearRightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            robot.frontLeftDrive.setTargetPosition(newLeftTarget);
-            robot.frontRightDrive.setTargetPosition(newRightTarget);
+            newLeftTarget = robot.rearLeftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newRightTarget = robot.rearRightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            robot.frontLeftDrive.setTargetPosition(-newLeftTarget);
+            robot.frontRightDrive.setTargetPosition(-newRightTarget);
 
             // Turn On RUN_TO_POSITION
             robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -164,7 +164,7 @@ public class RoverBotEncoderDriveTest extends LinearOpMode {
                 //robot.rearRightDrive.setPower(robot.frontRightDrive.getPower());
 
                 // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+                telemetry.addData("Path1",  "Running to %7d :%7d", -newLeftTarget,  -newRightTarget);
                 telemetry.addData("Path2",  "Running at %7d : %7d",
                                             robot.frontLeftDrive.getCurrentPosition(),
                                             robot.frontRightDrive.getCurrentPosition());

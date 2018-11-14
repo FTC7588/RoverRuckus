@@ -74,7 +74,7 @@ public class RoverBotMecanumDrive extends OpMode{
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Howdy Driver");    //
+        telemetry.addData("Say", "Howdy Yall");    //
     }
 
     /*
@@ -110,17 +110,17 @@ public class RoverBotMecanumDrive extends OpMode{
             //Mecanum test here
             x = gamepad1.left_stick_y;
             y = gamepad1.left_stick_x;
-            r = gamepad1.right_stick_y;
+            r = gamepad1.right_stick_x;
 
-            robot.frontLeftDrive.setPower(Range.scale(x - y + r, -2.0, 2.0, -1.0, 1.0));
-            robot.frontRightDrive.setPower(Range.scale(x + y - r, -2.0, 2.0, -1.0, 1.0));
-            robot.rearLeftDrive.setPower(Range.scale(x + y + r, -2.0, 2.0, -1.0, 1.0));
-            robot.rearRightDrive.setPower(Range.scale(x - y - r, -2.0, 2.0, -1.0, 1.0));
+            robot.frontLeftDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
+            robot.frontRightDrive.setPower(Range.scale(x + y, -2.0, 2.0, -1.0, 1.0));
+            robot.rearLeftDrive.setPower(Range.scale(x + y, -2.0, 2.0, -1.0, 1.0));
+            robot.rearRightDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
         }
 
         //control the cubeArm's rotation
         cubePower = -gamepad2.left_stick_y;
-        robot.cubeArm.setPower(Range.scale(cubePower, -1.0, 1.0, -0.1, 0.1));
+        robot.cubeArm.setPower(Range.scale(cubePower, -1.0, 1.0, -0.3, 0.3));
 
         //control the climber
         if (gamepad2.y) {

@@ -65,11 +65,7 @@ public class HardwareRoverBot
     public DcMotor  frontLeftDrive  = null;
     public DcMotor  frontRightDrive  = null;
     public DcMotor  climber = null;
-    public DcMotor  cubeArm = null;
-    public Servo mineralPusher = null;
-    public Servo mineralIntake = null;
-    public Servo hatch = null;
-    public ColorSensor colorSensor = null;
+    public Servo    markerArm = null;
     public BNO055IMU imu;
 
     static final double MID_SERVO = 0.5 ;
@@ -88,16 +84,11 @@ public class HardwareRoverBot
         hwMap = ahwMap;
 
         /**
-         *         Define and Initialize Servos
-          */
+         *         Define and Initialize Motors
+         */
 
-        mineralPusher = hwMap.get(Servo.class, "mineralPusher");
-        mineralIntake = hwMap.get(Servo.class, "mineralIntake");
-        hatch = hwMap.get(Servo.class, "hatch");
-
-        mineralPusher.setPosition(0);
-        mineralIntake.setPosition(MID_SERVO);
-        hatch.setPosition(MID_SERVO);
+        markerArm = hwMap.get(Servo.class, "markerArm");
+        markerArm.setPosition(MID_SERVO);
 
         /**
          *         Define and Initialize Motors
@@ -108,14 +99,12 @@ public class HardwareRoverBot
         frontLeftDrive  = hwMap.get(DcMotor.class, "frontLeftDrive");
         frontRightDrive = hwMap.get(DcMotor.class, "frontRightDrive");
         climber =hwMap.get(DcMotor.class, "climber");
-        cubeArm =hwMap.get(DcMotor.class, "cubeArm");
 
         rearLeftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rearRightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         frontLeftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         frontRightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
         climber.setDirection(DcMotor.Direction.FORWARD);
-        cubeArm.setDirection(DcMotor.Direction.FORWARD);
 
         // Set all motors to zero power
         rearLeftDrive.setPower(0);
@@ -123,29 +112,24 @@ public class HardwareRoverBot
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         climber.setPower(0);
-        cubeArm.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        rearLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rearRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rearRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        climber.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        cubeArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        climber.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         rearLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rearRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         climber.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        cubeArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         /**
          *         Define and initialize sensors
          */
-
-        colorSensor = hwMap.get(ColorSensor.class, "ColorSensor");
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually

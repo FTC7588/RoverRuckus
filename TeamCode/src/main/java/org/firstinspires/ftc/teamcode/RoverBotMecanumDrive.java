@@ -118,10 +118,6 @@ public class RoverBotMecanumDrive extends OpMode{
             robot.rearRightDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
         }
 
-        //control the cubeArm's rotation
-        cubePower = -gamepad2.left_stick_y;
-        robot.cubeArm.setPower(Range.scale(cubePower, -1.0, 1.0, -0.3, 0.3));
-
         //control the climber
         if (gamepad2.y) {
             robot.climber.setPower(1);
@@ -131,13 +127,11 @@ public class RoverBotMecanumDrive extends OpMode{
             robot.climber.setPower(0);
         }
 
-        if (gamepad2.dpad_up) {
-            robot.mineralIntake.setPosition(1.0);
-        } else if (gamepad2.dpad_down) {
-            robot.mineralIntake.setPosition(0);
+        //control the team marker
+        if (gamepad2.back) {
+            robot.markerArm.setPosition(1);
         } else {
-            robot.mineralIntake.setPosition(.5);
-            sleep(50);
+            robot.markerArm.setPosition(robot.MID_SERVO);
         }
     }
 

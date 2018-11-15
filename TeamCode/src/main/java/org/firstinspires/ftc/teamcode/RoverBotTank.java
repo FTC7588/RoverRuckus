@@ -104,10 +104,6 @@ public class RoverBotTank extends OpMode{
         robot.rearRightDrive.setPower(right);
         robot.frontRightDrive.setPower(right);
 
-        //control the cubeArm's rotation
-        cubePower = -gamepad1.left_stick_y;
-        robot.cubeArm.setPower(cubePower);
-
         //control the climber
         if (gamepad2.y) {
             robot.climber.setPower(1);

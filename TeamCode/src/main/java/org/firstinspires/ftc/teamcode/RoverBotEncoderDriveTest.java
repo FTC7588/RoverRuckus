@@ -72,7 +72,7 @@ public class RoverBotEncoderDriveTest extends LinearOpMode {
     HardwareRoverBot         robot   = new HardwareRoverBot();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+    static final double     COUNTS_PER_MOTOR_REV    = 1100 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
@@ -108,9 +108,7 @@ public class RoverBotEncoderDriveTest extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  48,  48, 10000.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  48,  48, 10.0);  // S1: Forward 47 Inches with 5 Sec timeout
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -127,28 +125,30 @@ public class RoverBotEncoderDriveTest extends LinearOpMode {
     public void encoderDrive(double speed,
                              double leftInches, double rightInches,
                              double timeoutS) {
-        int newLeftTarget;
-        int newRightTarget;
+        int newLeftTarget = 0;
+        int newRightTarget = 0;
+
+        boolean leftRunning;
+        boolean rightRunning;
+
+        speed = Math.abs(speed);
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.rearLeftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = robot.rearRightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            robot.frontLeftDrive.setTargetPosition(-newLeftTarget);
-            robot.frontRightDrive.setTargetPosition(-newRightTarget);
-
-            // Turn On RUN_TO_POSITION
-            robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            newLeftTarget = robot.frontLeftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newRightTarget = robot.frontRightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.frontLeftDrive.setPower(Math.abs(speed));
-            robot.frontRightDrive.setPower(Math.abs(speed));
-            robot.rearLeftDrive.setPower(robot.frontLeftDrive.getPower());
-            robot.rearRightDrive.setPower(robot.frontRightDrive.getPower());
+            robot.frontLeftDrive.setPower(-speed);
+            robot.frontRightDrive.setPower(-speed);
+            robot.rearLeftDrive.setPower(-speed);
+            robot.rearRightDrive.setPower(-speed);
+
+            leftRunning = true;
+            rightRunning = true;
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -156,32 +156,32 @@ public class RoverBotEncoderDriveTest extends LinearOpMode {
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (opModeIsActive() &&
-                   (runtime.seconds() < timeoutS) &&
-                   (robot.frontLeftDrive.isBusy() && robot.frontRightDrive.isBusy())) {
+            while (opModeIsActive() && (runtime.seconds() < timeoutS) &&
+                    (leftRunning && rightRunning)) {
 
-                //robot.rearLeftDrive.setPower(robot.frontLeftDrive.getPower());
-                //robot.rearRightDrive.setPower(robot.frontRightDrive.getPower());
+                if (robot.frontLeftDrive.getCurrentPosition() >= newLeftTarget - 10 &&
+                        robot.frontLeftDrive.getCurrentPosition() <= newLeftTarget + 10) {
+                    robot.frontLeftDrive.setPower(0);
+                    robot.rearLeftDrive.setPower(0);
+
+                    leftRunning = false;
+                }
+
+                if (robot.frontRightDrive.getCurrentPosition() >= newLeftTarget - 10 &&
+                        robot.frontRightDrive.getCurrentPosition() <= newLeftTarget + 10) {
+                    robot.rearRightDrive.setPower(0);
+                    robot.frontRightDrive.setPower(0);
+
+                    rightRunning = false;
+                }
 
                 // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", -newLeftTarget,  -newRightTarget);
+                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
                 telemetry.addData("Path2",  "Running at %7d : %7d",
                                             robot.frontLeftDrive.getCurrentPosition(),
                                             robot.frontRightDrive.getCurrentPosition());
                 telemetry.update();
             }
-
-            // Stop all motion;
-            robot.rearLeftDrive.setPower(0);
-            robot.rearRightDrive.setPower(0);
-            robot.frontLeftDrive.setPower(0);
-            robot.frontRightDrive.setPower(0);
-
-            // Turn off RUN_TO_POSITION
-            robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            //  sleep(250);   // optional pause after each move
         }
     }
 }

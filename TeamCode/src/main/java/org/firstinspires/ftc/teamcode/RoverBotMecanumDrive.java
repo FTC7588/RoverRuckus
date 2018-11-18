@@ -74,7 +74,7 @@ public class RoverBotMecanumDrive extends OpMode{
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Howdy Yall");    //
+        telemetry.addData("Say", "Oi Mate");    //
     }
 
     /*
@@ -110,12 +110,17 @@ public class RoverBotMecanumDrive extends OpMode{
             //Mecanum test here
             x = gamepad1.left_stick_y;
             y = gamepad1.left_stick_x;
-            r = gamepad1.right_stick_x;
+            r = -gamepad1.right_stick_x;
 
-            robot.frontLeftDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
-            robot.frontRightDrive.setPower(Range.scale(x + y, -2.0, 2.0, -1.0, 1.0));
-            robot.rearLeftDrive.setPower(Range.scale(x + y, -2.0, 2.0, -1.0, 1.0));
-            robot.rearRightDrive.setPower(Range.scale(x - y, -2.0, 2.0, -1.0, 1.0));
+            //robot.frontLeftDrive.setPower(Range.scale(x - y + r, -2.0, 2.0, -1.0, 1.0));
+            //robot.frontRightDrive.setPower(Range.scale(x + y - r, -2.0, 2.0, -1.0, 1.0));
+            //robot.rearLeftDrive.setPower(Range.scale(x + y + r, -2.0, 2.0, -1.0, 1.0));
+            //robot.rearRightDrive.setPower(Range.scale(x - y - r, -2.0, 2.0, -1.0, 1.0));
+
+            robot.frontLeftDrive.setPower(Range.clip(x - y + r, -1.0, 1.0));
+            robot.frontRightDrive.setPower(Range.clip(x + y - r, -1.0, 1.0));
+            robot.rearLeftDrive.setPower(Range.clip(x + y + r, -1.0, 1.0));
+            robot.rearRightDrive.setPower(Range.clip(x - y - r, -1.0, 1.0));
         }
 
         //control the climber
@@ -129,8 +134,8 @@ public class RoverBotMecanumDrive extends OpMode{
 
         //control the team marker
         if (gamepad2.back) {
-            robot.markerArm.setPosition(1);
-        } else {
+            robot.markerArm.setPosition(0);
+        } else if (gamepad2.start) {
             robot.markerArm.setPosition(robot.MID_SERVO);
         }
     }

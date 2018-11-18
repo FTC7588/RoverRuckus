@@ -51,7 +51,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @TeleOp(name="Rover Bot Arcade", group="RoverBot")
-//@Disabled
+@Disabled
 public class RoverBotArcade extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -84,7 +84,7 @@ public class RoverBotArcade extends LinearOpMode {
             // Run wheels in POV mode (note: The joystick goes negative when pushed forwards, so negate it)
             // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
             // This way it's also easy to just drive straight, or just turn.
-            drive = gamepad1.left_stick_y;
+            drive = -gamepad1.left_stick_y;
             turn = -gamepad1.right_stick_x;
 
             // Combine drive and turn for blended motion.

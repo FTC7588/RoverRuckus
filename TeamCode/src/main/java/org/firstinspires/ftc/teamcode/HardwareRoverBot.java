@@ -66,7 +66,7 @@ public class HardwareRoverBot
     public DcMotor  frontRightDrive  = null;
     public DcMotor  climber = null;
     public Servo    markerArm = null;
-    public BNO055IMU imu;
+    public BNO055IMU imu = null;
 
     static final double MID_SERVO = 0.5 ;
 
@@ -88,7 +88,6 @@ public class HardwareRoverBot
          */
 
         markerArm = hwMap.get(Servo.class, "markerArm");
-        markerArm.setPosition(MID_SERVO);
 
         /**
          *         Define and Initialize Motors

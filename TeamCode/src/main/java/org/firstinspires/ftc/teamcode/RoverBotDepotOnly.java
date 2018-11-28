@@ -106,6 +106,8 @@ public class RoverBotDepotOnly extends LinearOpMode {
     private TFObjectDetector tfod;
     private String goldPos;
 
+    ElapsedTime timeOut = new ElapsedTime();
+
     @Override
     public void runOpMode() {
 
@@ -132,8 +134,17 @@ public class RoverBotDepotOnly extends LinearOpMode {
         robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.climber.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        telemetry.addData("IMU"," Calibrating");
+        telemetry.update();
+
+        while (!isStopRequested() && !robot.imu.isGyroCalibrated()) {
+            sleep(50);
+            idle();
+        }
+
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Status ", "Waiting For Start");
+        telemetry.addData("IMU",robot.imu.getCalibrationStatus());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -141,31 +152,33 @@ public class RoverBotDepotOnly extends LinearOpMode {
 
         initTensor();
 
-        elevatorMove(ELEVATOR_SPEED, 13.5, 10);
+        goldPos = sample();
+
+        timeOut.reset();
+
+        while (goldPos == "FAILED" && opModeIsActive() && timeOut.seconds() <= 5) {
+            goldPos = sample();
+        }
+
+        elevatorMove(ELEVATOR_SPEED, 14, 10);
 
         //strafe("LEFT", 1.0, 750);
 
         gyroTurn(TURN_SPEED, -25);
 
-        encoderDrive(DRIVE_SPEED, 1, 1, 1);
+        encoderDrive(.1, 1, 1, 1);
 
         gyroTurn(TURN_SPEED, 0);
 
         elevatorMove(ELEVATOR_SPEED, -13.5, 10);
 
-        gyroHold(TURN_SPEED, 0, 1);
-
-        goldPos = sample();
-
-        while (goldPos == "FAILED" && opModeIsActive()) {
-            goldPos = sample();
-        }
-
         if (goldPos == "LEFT") {
             telemetry.addData("TensorFlow","LEFT");
             telemetry.update();
 
-            gyroTurn(TURN_SPEED, 45);
+            sleep(2000);
+
+            /**gyroTurn(TURN_SPEED, 45);
 
             sleep(1000);
 
@@ -183,12 +196,14 @@ public class RoverBotDepotOnly extends LinearOpMode {
 
             encoderDrive(DRIVE_SPEED,25 , 25, 5);
 
-            sleep(1000);
+            sleep(1000);*/
         } else if (goldPos == "CENTER") {
             telemetry.addData("TensorFlow","CENTER");
             telemetry.update();
 
-            gyroHold(TURN_SPEED, 0, .2);
+            sleep(2000);
+
+            /**gyroHold(TURN_SPEED, 0, .2);
 
             sleep(1000);
 
@@ -196,12 +211,14 @@ public class RoverBotDepotOnly extends LinearOpMode {
 
             encoderDrive(DRIVE_SPEED,19 , 19, 5);
 
-            sleep(1000);
-        } else {
+            sleep(1000);*/
+        } else if (goldPos == "RIGHT") {
             telemetry.addData("TensorFlow","RIGHT");
             telemetry.update();
 
-            gyroTurn(TURN_SPEED, -45);
+            sleep(2000);
+
+            /**gyroTurn(TURN_SPEED, -45);
 
             sleep(1000);
 
@@ -219,14 +236,21 @@ public class RoverBotDepotOnly extends LinearOpMode {
 
             encoderDrive(DRIVE_SPEED,25 , 25, 5);
 
-            sleep(1000);
+            sleep(1000);*/
+        } else {
+            telemetry.addData("TensorFLow"," Failed");
+            telemetry.update();
         }
 
-        robot.markerArm.setPosition(.25);
+        //encoderDrive(DRIVE_SPEED, 36, 36, 10);
 
-        sleep(1000);
+        //encoderDrive(DRIVE_SPEED, 12, 12, 10);
 
-        robot.markerArm.setPosition(robot.MID_SERVO);
+        //robot.markerArm.setPosition(.15);
+
+        //sleep(1000);
+
+        //robot.markerArm.setPosition(robot.MID_SERVO);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -276,6 +300,8 @@ public class RoverBotDepotOnly extends LinearOpMode {
                 telemetry.addData("Elevator Path", "Running at %7d", robot.climber.getCurrentPosition());
                 telemetry.update();
             }
+
+            robot.climber.setPower(0);
         }
     }
 
@@ -338,10 +364,22 @@ public class RoverBotDepotOnly extends LinearOpMode {
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.frontLeftDrive.setPower(-speed);
-            robot.frontRightDrive.setPower(-speed);
-            robot.rearLeftDrive.setPower(-speed);
-            robot.rearRightDrive.setPower(-speed);
+
+            if (leftInches >= robot.frontLeftDrive.getCurrentPosition()) {
+                robot.frontLeftDrive.setPower(speed);
+                robot.rearLeftDrive.setPower(speed);
+            } else {
+                robot.frontLeftDrive.setPower(-speed);
+                robot.rearLeftDrive.setPower(-speed);
+            }
+
+            if (rightInches >= robot.frontRightDrive.getCurrentPosition()) {
+                robot.frontRightDrive.setPower(speed);
+                robot.rearRightDrive.setPower(speed);
+            } else {
+                robot.frontRightDrive.setPower(-speed);
+                robot.rearRightDrive.setPower(-speed);
+            }
 
             leftRunning = true;
             rightRunning = true;
@@ -362,6 +400,8 @@ public class RoverBotDepotOnly extends LinearOpMode {
                     leftRunning = false;
                 }
 
+                sleep(50);
+
                 if (robot.frontRightDrive.getCurrentPosition() >= newRightTarget) {
                     robot.rearRightDrive.setPower(0);
                     robot.frontRightDrive.setPower(0);
@@ -376,6 +416,11 @@ public class RoverBotDepotOnly extends LinearOpMode {
                         robot.frontRightDrive.getCurrentPosition());
                 telemetry.update();
             }
+
+            robot.rearLeftDrive.setPower(0);
+            robot.rearRightDrive.setPower(0);
+            robot.frontLeftDrive.setPower(0);
+            robot.frontRightDrive.setPower(0);
         }
     }
 

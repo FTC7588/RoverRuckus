@@ -36,7 +36,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -76,26 +75,27 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Rover Bot Depot Only", group="Auto")
+@Autonomous(name="Rover Bot Landing Only", group="Auto")
 //@Disabled
-public class RoverBotDepotOnly extends LinearOpMode {
+public class RoverBotLandingOnly extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareRoverBot robot = new HardwareRoverBot();   // Use a Pushbot's hardware
+    private ElapsedTime     runtime = new ElapsedTime();
 
-    static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: TETRIX Motor Encoder
+    static final double COUNTS_PER_MOTOR_REV = 1220;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double SPOOL_DIAMETER_INCHES = 1.625;
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double ELEVATOR_COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV / (SPOOL_DIAMETER_INCHES * 3.1415);
+    static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
+    static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
+    static final double P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
 
     static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
-
-    static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
-    static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
     static final double ELEVATOR_SPEED = 0.5;
 
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
@@ -128,10 +128,14 @@ public class RoverBotDepotOnly extends LinearOpMode {
 
         robot.frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rearLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rearRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.climber.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rearLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rearRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.climber.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         telemetry.addData("IMU"," Calibrating");
@@ -160,126 +164,31 @@ public class RoverBotDepotOnly extends LinearOpMode {
             goldPos = sample();
         }
 
-        elevatorMove(ELEVATOR_SPEED, 14, 10);
-
-        //strafe("LEFT", 1.0, 750);
-
-        gyroTurn(TURN_SPEED, -25);
-
-        encoderDrive(.1, 1, 1, 1);
-
+        elevatorMove(ELEVATOR_SPEED, 13, 1980027385);
+        gyroTurn(TURN_SPEED, -45);
+        elevatorMove(ELEVATOR_SPEED, -13, 5);
         gyroTurn(TURN_SPEED, 0);
-
-        elevatorMove(ELEVATOR_SPEED, -13.5, 10);
-
-        if (goldPos == "LEFT") {
-            telemetry.addData("TensorFlow","LEFT");
-            telemetry.update();
-
-            sleep(2000);
-
-            /**gyroTurn(TURN_SPEED, 45);
-
-            sleep(1000);
-
-            gyroHold(TURN_SPEED, 45, .2);
-
-            sleep(1000);
-
-            encoderDrive(DRIVE_SPEED,27 , 27, 5);
-
-            sleep(1000);
-
-            gyroTurn(TURN_SPEED, -45);
-
-            sleep(1000);
-
-            encoderDrive(DRIVE_SPEED,25 , 25, 5);
-
-            sleep(1000);*/
-        } else if (goldPos == "CENTER") {
-            telemetry.addData("TensorFlow","CENTER");
-            telemetry.update();
-
-            sleep(2000);
-
-            /**gyroHold(TURN_SPEED, 0, .2);
-
-            sleep(1000);
-
-            encoderDrive(DRIVE_SPEED,24 , 24, 5);
-
-            encoderDrive(DRIVE_SPEED,19 , 19, 5);
-
-            sleep(1000);*/
-        } else if (goldPos == "RIGHT") {
-            telemetry.addData("TensorFlow","RIGHT");
-            telemetry.update();
-
-            sleep(2000);
-
-            /**gyroTurn(TURN_SPEED, -45);
-
-            sleep(1000);
-
-            gyroHold(TURN_SPEED, -45, .2);
-
-            sleep(1000);
-
-            encoderDrive(DRIVE_SPEED,27 , 27, 5);
-
-            sleep(1000);
-
-            gyroTurn(TURN_SPEED, 45);
-
-            sleep(1000);
-
-            encoderDrive(DRIVE_SPEED,25 , 25, 5);
-
-            sleep(1000);*/
-        } else {
-            telemetry.addData("TensorFLow"," Failed");
-            telemetry.update();
-        }
-
-        //encoderDrive(DRIVE_SPEED, 36, 36, 10);
-
-        //encoderDrive(DRIVE_SPEED, 12, 12, 10);
-
-        //robot.markerArm.setPosition(.15);
-
-        //sleep(1000);
-
-        //robot.markerArm.setPosition(robot.MID_SERVO);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
     }
 
     public void elevatorMove(double speed, double inches, double timeoutS) {
-        ElapsedTime runtime = new ElapsedTime();
-
-        int newTarget = 0;
-        boolean running = false;
-
-        speed = Math.abs(speed);
+        int newTarget;
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
             newTarget = robot.climber.getCurrentPosition() + (int) (inches * ELEVATOR_COUNTS_PER_INCH);
+            robot.climber.setTargetPosition(newTarget);
+
+            // Turn On RUN_TO_POSITION
+            robot.climber.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
-
-            if (inches >= robot.climber.getCurrentPosition()) {
-                robot.climber.setPower(speed);
-            } else {
-                robot.climber.setPower(-speed);
-            }
-
-            running = true;
+            robot.climber.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -287,21 +196,21 @@ public class RoverBotDepotOnly extends LinearOpMode {
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (opModeIsActive() && (runtime.seconds() < timeoutS) && running) {
-
-                if (robot.climber.getCurrentPosition() >= newTarget - 20 && robot.climber.getCurrentPosition() <= newTarget + 20) {
-                    robot.climber.setPower(0);
-
-                    running = false;
-                }
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) && robot.climber.isBusy()) {
 
                 // Display it for the driver.
-                telemetry.addData("Elevator Path", "Running to %7d", newTarget);
-                telemetry.addData("Elevator Path", "Running at %7d", robot.climber.getCurrentPosition());
+                telemetry.addData("Path1", "Running to %7d", newTarget);
+                telemetry.addData("Path2", "Running at %7d",
+                        robot.climber.getCurrentPosition());
                 telemetry.update();
             }
 
+            // Stop all motion;
             robot.climber.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            robot.climber.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
@@ -334,96 +243,110 @@ public class RoverBotDepotOnly extends LinearOpMode {
         robot.frontRightDrive.setPower(0);
     }
 
-    /*
-     *  Method to perfmorm a relative move, based on encoder counts.
-     *  Encoders are not reset as the move is based on the current position.
-     *  Move will stop if any of three conditions occur:
+    /**
+     *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
+     *  Move will stop if either of these conditions occur:
      *  1) Move gets to the desired position
-     *  2) Move runs out of time
-     *  3) Driver stops the opmode running.
+     *  2) Driver stops the opmode running.
+     *
+     * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
+     * @param distance   Distance (in inches) to move from current position.  Negative distance means move backwards.
+     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from current heading.
      */
-    public void encoderDrive(double speed,
-                             double leftInches, double rightInches,
-                             double timeoutS) {
+    public void gyroDrive ( double speed,
+                            double distance,
+                            double angle, int timeoutS) {
 
-        ElapsedTime runtime = new ElapsedTime();
-        int newLeftTarget = 0;
-        int newRightTarget = 0;
-
-        boolean leftRunning = false;
-        boolean rightRunning = false;
-
-        speed = Math.abs(speed);
+        int     newLeftTarget;
+        int     newRightTarget;
+        int     moveCounts;
+        double  max;
+        double  error;
+        double  steer;
+        double  leftSpeed;
+        double  rightSpeed;
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.frontLeftDrive.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
-            newRightTarget = robot.frontRightDrive.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
+            moveCounts = (int)(distance * COUNTS_PER_INCH);
+            newLeftTarget = robot.rearLeftDrive.getCurrentPosition() + moveCounts;
+            newRightTarget = robot.rearRightDrive.getCurrentPosition() + moveCounts;
 
-            // reset the timeout time and start motion.
+            // Set Target and Turn On RUN_TO_POSITION
+            robot.rearLeftDrive.setTargetPosition(newLeftTarget);
+            robot.rearRightDrive.setTargetPosition(newRightTarget);
+            robot.frontLeftDrive.setTargetPosition(newLeftTarget);
+            robot.frontRightDrive.setTargetPosition(newRightTarget);
+
+            robot.rearLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.rearRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // start motion.
             runtime.reset();
+            speed = Range.clip(Math.abs(speed), 0.0, 1.0);
+            robot.rearLeftDrive.setPower(speed);
+            robot.rearRightDrive.setPower(speed);
+            robot.frontLeftDrive.setPower(speed);
+            robot.frontRightDrive.setPower(speed);
 
-            if (leftInches >= robot.frontLeftDrive.getCurrentPosition()) {
-                robot.frontLeftDrive.setPower(speed);
-                robot.rearLeftDrive.setPower(speed);
-            } else {
-                robot.frontLeftDrive.setPower(-speed);
-                robot.rearLeftDrive.setPower(-speed);
-            }
-
-            if (rightInches >= robot.frontRightDrive.getCurrentPosition()) {
-                robot.frontRightDrive.setPower(speed);
-                robot.rearRightDrive.setPower(speed);
-            } else {
-                robot.frontRightDrive.setPower(-speed);
-                robot.rearRightDrive.setPower(-speed);
-            }
-
-            leftRunning = true;
-            rightRunning = true;
-
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-            // its target position, the motion will stop.  This is "safer" in the event that the robot will
-            // always end the motion as soon as possible.
-            // However, if you require that BOTH motors have finished their moves before the robot continues
-            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() && (runtime.seconds() < timeoutS) &&
-                    (leftRunning || rightRunning)) {
+                    (robot.rearLeftDrive.isBusy() || robot.rearRightDrive.isBusy() || robot.frontRightDrive.isBusy())) {
 
-                if (robot.frontLeftDrive.getCurrentPosition() >= newLeftTarget) {
-                    robot.frontLeftDrive.setPower(0);
-                    robot.rearLeftDrive.setPower(0);
+                // adjust relative speed based on heading error.
+                error = getError(angle);
+                steer = getSteer(error, P_DRIVE_COEFF);
 
-                    leftRunning = false;
+                // if driving in reverse, the motor correction also needs to be reversed
+                if (distance < 0) {
+                    steer *= -1.0;
                 }
 
-                sleep(50);
+                leftSpeed = speed + steer;
+                rightSpeed = speed - steer;
 
-                if (robot.frontRightDrive.getCurrentPosition() >= newRightTarget) {
-                    robot.rearRightDrive.setPower(0);
-                    robot.frontRightDrive.setPower(0);
-
-                    rightRunning = false;
+                // Normalize speeds if either one exceeds +/- 1.0;
+                max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+                if (max > 1.0)
+                {
+                    leftSpeed /= max;
+                    rightSpeed /= max;
                 }
 
-                // Display it for the driver.
-                telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
-                telemetry.addData("Path2", "Running at %7d : %7d",
-                        robot.frontLeftDrive.getCurrentPosition(),
+                robot.rearLeftDrive.setPower(leftSpeed);
+                robot.rearRightDrive.setPower(rightSpeed);
+                robot.frontLeftDrive.setPower(leftSpeed);
+                robot.frontRightDrive.setPower(rightSpeed);
+
+                // Display drive status for the driver.
+                telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
+                telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
+                telemetry.addData("Actual",  "%7d:%7d:%7d:%7d",      robot.rearLeftDrive.getCurrentPosition(),
+                        robot.rearRightDrive.getCurrentPosition(), robot.frontLeftDrive.getCurrentPosition(),
                         robot.frontRightDrive.getCurrentPosition());
+                telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
                 telemetry.update();
             }
 
+            // Stop all motion;
             robot.rearLeftDrive.setPower(0);
             robot.rearRightDrive.setPower(0);
             robot.frontLeftDrive.setPower(0);
             robot.frontRightDrive.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            robot.rearLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rearRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
-
     /**
      * Method to spin on central axis to point in a new direction.
      * Move will stop if either of these conditions occur:

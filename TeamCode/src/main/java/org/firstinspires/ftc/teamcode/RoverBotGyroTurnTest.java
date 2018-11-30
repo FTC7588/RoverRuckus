@@ -76,9 +76,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto Drive By Gyro", group="Test")
+@Autonomous(name="Rover Bot Auto Drive By Gyro", group="Test")
 @Disabled
-public class GyroTurnTest extends LinearOpMode {
+public class RoverBotGyroTurnTest extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareRoverBot         robot   = new HardwareRoverBot();   // Use a Pushbot's hardware

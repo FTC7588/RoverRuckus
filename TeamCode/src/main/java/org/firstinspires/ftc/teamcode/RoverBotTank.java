@@ -51,7 +51,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Rover Bot Tank", group="RoverBot")
+@TeleOp(name="Rover Bot Tank", group="Teleop")
 @Disabled
 public class RoverBotTank extends OpMode{
 

@@ -50,7 +50,7 @@ import static android.os.SystemClock.sleep;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Rover Bot Mecanum Drive", group="RoverBot")
+@TeleOp(name="Rover Bot Mecanum Drive", group="Teleop")
 //@Disabled
 public class RoverBotMecanumDrive extends OpMode{
 

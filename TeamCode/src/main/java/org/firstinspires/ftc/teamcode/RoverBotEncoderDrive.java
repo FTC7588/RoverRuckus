@@ -75,7 +75,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Encoder Drive Test", group="Test")
+@Autonomous(name="Rover Bot Encoder Drive Test", group="Test")
 //@Disabled
 public class RoverBotEncoderDrive extends LinearOpMode {
 
@@ -107,12 +107,16 @@ public class RoverBotEncoderDrive extends LinearOpMode {
          */
         robot.init(hardwareMap);
 
-        robot.rearRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rearLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rearRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
-        robot.rearRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rearLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rearRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Send telemetry message to alert driver that we are calibrating;
         telemetry.addData(">", "Calibrating Gyro");    //
@@ -132,15 +136,12 @@ public class RoverBotEncoderDrive extends LinearOpMode {
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         // Put a hold after each turn
-        gyroDrive(DRIVE_SPEED, 12.0, 0.0);    // Drive FWD 48 inches
-        //gyroTurn( TURN_SPEED, -45.0);         // Turn  CCW to -45 Degrees
-        //gyroHold( TURN_SPEED, -45.0, 0.5);    // Hold -45 Deg heading for a 1/2 second
-        //gyroDrive(DRIVE_SPEED, 12.0, -45.0);  // Drive FWD 12 inches at 45 degrees
-        //gyroTurn( TURN_SPEED,  45.0);         // Turn  CW  to  45 Degrees
-        //gyroHold( TURN_SPEED,  45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
-        //gyroTurn( TURN_SPEED,   0.0);         // Turn  CW  to   0 Degrees
-        //gyroHold( TURN_SPEED,   0.0, 1.0);    // Hold  0 Deg heading for a 1 second
-        //gyroDrive(DRIVE_SPEED,-48.0, 0.0);    // Drive REV 48 inches
+        gyroDrive(DRIVE_SPEED, -12.0, 0.0);    // Drive FWD 48 inches
+        gyroHold( TURN_SPEED, 0.0, 7.5);    // Hold -45 Deg heading for a 1/2 second
+        gyroDrive(DRIVE_SPEED,12.0, 0.0);    // Drive REV 48 inches
+        gyroHold( TURN_SPEED,   0.0, 1.0);    // Hold  0 Deg heading for a 1 second
+        gyroDrive(DRIVE_SPEED, -48.0, 0.0);  // Drive FWD 12 inches at 45 degrees
+        gyroHold( TURN_SPEED,  0.0, 7.5);    // Hold  45 Deg heading for a 1/2 second
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -183,20 +184,24 @@ public class RoverBotEncoderDrive extends LinearOpMode {
             // Set Target and Turn On RUN_TO_POSITION
             robot.rearLeftDrive.setTargetPosition(newLeftTarget);
             robot.rearRightDrive.setTargetPosition(newRightTarget);
+            robot.frontLeftDrive.setTargetPosition(newLeftTarget);
+            robot.frontRightDrive.setTargetPosition(newRightTarget);
 
             robot.rearLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.rearRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // start motion.
             speed = Range.clip(Math.abs(speed), 0.0, 1.0);
             robot.rearLeftDrive.setPower(speed);
             robot.rearRightDrive.setPower(speed);
-            robot.frontLeftDrive.setPower(robot.rearLeftDrive.getPower());
-            robot.frontRightDrive.setPower(robot.rearRightDrive.getPower());
+            robot.frontLeftDrive.setPower(speed);
+            robot.frontRightDrive.setPower(speed);
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                    (robot.rearLeftDrive.isBusy() || robot.frontLeftDrive.isBusy() || robot.rearRightDrive.isBusy() || robot.frontRightDrive.isBusy())) {
+                    (robot.rearLeftDrive.isBusy() || robot.rearRightDrive.isBusy() || robot.frontRightDrive.isBusy())) {
 
                 // adjust relative speed based on heading error.
                 error = getError(angle);
@@ -226,8 +231,9 @@ public class RoverBotEncoderDrive extends LinearOpMode {
                 // Display drive status for the driver.
                 telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
                 telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
-                telemetry.addData("Actual",  "%7d:%7d",      robot.rearLeftDrive.getCurrentPosition(),
-                        robot.rearRightDrive.getCurrentPosition());
+                telemetry.addData("Actual",  "%7d:%7d:%7d:%7d",      robot.rearLeftDrive.getCurrentPosition(),
+                        robot.rearRightDrive.getCurrentPosition(), robot.frontLeftDrive.getCurrentPosition(),
+                        robot.frontRightDrive.getCurrentPosition());
                 telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
                 telemetry.update();
             }
@@ -241,6 +247,8 @@ public class RoverBotEncoderDrive extends LinearOpMode {
             // Turn off RUN_TO_POSITION
             robot.rearLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rearRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
@@ -326,8 +334,10 @@ public class RoverBotEncoderDrive extends LinearOpMode {
         }
 
         // Send desired speeds to motors.
-        robot.rearLeftDrive.setPower(leftSpeed);
-        robot.rearRightDrive.setPower(rightSpeed);
+        robot.rearLeftDrive.setPower(-leftSpeed);
+        robot.rearRightDrive.setPower(-rightSpeed);
+        robot.frontLeftDrive.setPower(-leftSpeed);
+        robot.frontRightDrive.setPower(-rightSpeed);
 
         // Display it for the driver.
         telemetry.addData("Target", "%5.2f", angle);

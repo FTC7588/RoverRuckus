@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -75,15 +74,15 @@ import java.util.List;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Rover Bot Landing Only", group="Auto")
+@Autonomous(name="Rover Bot Depot Land, Sample, Claim, and Park There Crater", group="Auto")
 //@Disabled
-public class RoverBotLandingOnly extends LinearOpMode {
+public class RoverBotDepotLandSampleClaimParkTheres extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareRoverBot robot = new HardwareRoverBot();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
-    static final double COUNTS_PER_MOTOR_REV = 1220;    // eg: TETRIX Motor Encoder
+    static final double COUNTS_PER_MOTOR_REV = 1220;
     static final double COUNTS_PER_ELEVATOR_REV = 1680;
     static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
@@ -95,9 +94,9 @@ public class RoverBotLandingOnly extends LinearOpMode {
     static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
 
-    static final double DRIVE_SPEED = 0.6;
-    static final double TURN_SPEED = 0.5;
-    static final double ELEVATOR_SPEED = 0.8;
+    static final double DRIVE_SPEED = .6;
+    static final double TURN_SPEED = 0.7;
+    static final double ELEVATOR_SPEED = 1.0;
 
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -170,6 +169,39 @@ public class RoverBotLandingOnly extends LinearOpMode {
         gyroTurn(TURN_SPEED, -45);
         elevatorMove(ELEVATOR_SPEED, -10, 5);
         gyroTurn(TURN_SPEED, 0);
+
+        //Sampling
+        gyroDrive(DRIVE_SPEED, 12, 0, 5);
+
+        if (goldPos == "LEFT") {
+            gyroTurn(TURN_SPEED, 47);
+            gyroDrive(DRIVE_SPEED, 30, 47, 5);
+            //gyroTurn(TURN_SPEED, 135);
+            gyroTurn(TURN_SPEED, -40);
+            gyroDrive(DRIVE_SPEED, 30, -40, 5);
+        } else if (goldPos == "RIGHT") {
+            gyroTurn(TURN_SPEED, -45);
+            gyroDrive(DRIVE_SPEED, 24, -45, 5);
+            gyroTurn(TURN_SPEED, 40);
+            gyroDrive(DRIVE_SPEED, 30, 40, 5);
+        } else {
+            //strafe("RIGHT", DRIVE_SPEED, 500);
+            gyroDrive(DRIVE_SPEED, 40, 0, 5);
+        }
+
+        //Claim
+        gyroTurn(TURN_SPEED, 0);
+        robot.markerArm.setPosition(.4);
+        sleep(250);
+        robot.markerArm.setPosition(.7);
+        gyroDrive(DRIVE_SPEED, 5.5, 0, 5);
+
+        //Park
+        gyroTurn(TURN_SPEED, 130);
+        gyroDrive(DRIVE_SPEED, 24, 130, 10);
+        gyroTurn(TURN_SPEED, 135);
+        gyroDrive(DRIVE_SPEED, 52, 135, 10);
+
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

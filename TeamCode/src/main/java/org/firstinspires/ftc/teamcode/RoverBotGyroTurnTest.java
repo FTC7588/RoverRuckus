@@ -77,7 +77,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  */
 
 @Autonomous(name="Rover Bot Auto Drive By Gyro", group="Test")
-@Disabled
+//@Disabled
 public class RoverBotGyroTurnTest extends LinearOpMode {
 
     /* Declare OpMode members. */

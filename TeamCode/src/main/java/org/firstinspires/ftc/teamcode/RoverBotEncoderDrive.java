@@ -76,7 +76,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  */
 
 @Autonomous(name="Rover Bot Encoder Drive Test", group="Test")
-//@Disabled
+@Disabled
 public class RoverBotEncoderDrive extends LinearOpMode {
 
     /* Declare OpMode members. */

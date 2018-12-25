@@ -29,12 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
@@ -50,14 +46,13 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Rover Bot Arcade", group="Teleop")
+@TeleOp(name="Jack Jack Arcade", group="Teleop")
 //@Disabled
-public class RoverBotArcade extends LinearOpMode {
+public class JackJackArcade extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwareRoverBot robot           = new HardwareRoverBot();   // Use a Pushbot's hardware
+    HardwareJackJack robot           = new HardwareJackJack();   // Use a Pushbot's hardware
                                                                // could also use HardwarePushbotMatrix class.
-
     @Override
     public void runOpMode() {
         double left;
@@ -101,17 +96,7 @@ public class RoverBotArcade extends LinearOpMode {
             // Output the safe vales to the motor drives.
             robot.rearLeftDrive.setPower(left);
             robot.rearRightDrive.setPower(right);
-            robot.frontRightDrive.setPower(right);
-            robot.frontLeftDrive.setPower(left);
-
-            //control the climber
-            if (gamepad2.y) {
-                robot.climber.setPower(1);
-            } else if (gamepad2.a) {
-                robot.climber.setPower(-1);
-            } else {
-            robot.climber.setPower(0);
-            }
+            robot.frontDrive.setPower(drive);
         }
     }
 }

@@ -94,7 +94,7 @@ public class RoverBotDepotLandSampleClaimParkTheres extends LinearOpMode {
     static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
 
-    static final double DRIVE_SPEED = .6;
+    static final double DRIVE_SPEED = .7;
     static final double TURN_SPEED = 0.7;
     static final double ELEVATOR_SPEED = 1.0;
 
@@ -174,16 +174,16 @@ public class RoverBotDepotLandSampleClaimParkTheres extends LinearOpMode {
         gyroDrive(DRIVE_SPEED, 12, 0, 5);
 
         if (goldPos == "LEFT") {
-            gyroTurn(TURN_SPEED, 47);
-            gyroDrive(DRIVE_SPEED, 30, 47, 5);
+            gyroTurn(TURN_SPEED, 48);
+            gyroDrive(DRIVE_SPEED, 27, 48, 5);
             //gyroTurn(TURN_SPEED, 135);
             gyroTurn(TURN_SPEED, -40);
             gyroDrive(DRIVE_SPEED, 30, -40, 5);
         } else if (goldPos == "RIGHT") {
-            gyroTurn(TURN_SPEED, -45);
-            gyroDrive(DRIVE_SPEED, 24, -45, 5);
+            gyroTurn(TURN_SPEED, -46);
+            gyroDrive(DRIVE_SPEED, 22, -45, 3);
             gyroTurn(TURN_SPEED, 40);
-            gyroDrive(DRIVE_SPEED, 30, 40, 5);
+            gyroDrive(DRIVE_SPEED, 30, 43, 3);
         } else {
             //strafe("RIGHT", DRIVE_SPEED, 500);
             gyroDrive(DRIVE_SPEED, 40, 0, 5);

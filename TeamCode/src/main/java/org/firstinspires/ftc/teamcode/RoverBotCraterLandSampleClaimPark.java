@@ -190,7 +190,11 @@ public class RoverBotCraterLandSampleClaimPark extends LinearOpMode {
 
         gyroTurn(TURN_SPEED, 90);
 
-        gyroDrive(1.0, 42, 90, 3);
+        if (goldPos == "RIGHT") {
+            gyroDrive(DRIVE_SPEED, 6, 90, 1);
+        }
+
+        gyroDrive(1.0, 48, 90, 3);
         gyroTurn(TURN_SPEED, 130);
         gyroDrive(1.0, 42, 135, 5);
 
